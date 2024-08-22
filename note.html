@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Note Application</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .note-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .note-container h2 {
+            margin: 0 0 10px 0;
+        }
+        .note-container textarea {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            background-color: #f4f4f4;
+            resize: none;
+            height: 100px;
+        }
+        .note-container textarea:focus {
+            outline: none;
+            background-color: #e8e8e8;
+        }
+        .add-note-btn {
+            display: block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .add-note-btn:hover {
+            background-color: #555;
+        }
+        .notes-list {
+            width: 100%;
+            max-width: 800px;
+        }
+        .note-item {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .note-item h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        .note-item p {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .delete-note-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-note-btn:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<h1>My Notes</h1>
+
+<div class="note-container">
+    <h2>Add a New Note</h2>
+    <textarea id="noteTitle" placeholder="Note Title"></textarea>
+    <textarea id="noteContent" placeholder="Note Content"></textarea>
+    <button class="add-note-btn" onclick="addNote()">Add Note</button>
+</div>
+
+<div class="notes-list" id="notesList">
+    <!-- Notes will be displayed here -->
+</div>
+
+<script>
+    let notes = [];
+
+    function addNote() {
+        const noteTitle = document.getElementById('noteTitle').value;
+        const noteContent = document.getElementById('noteContent').value;
+
+        if(noteTitle === '' || noteContent === '') {
+            alert('Please fill out both the title and content fields.');
+            return;
+        }
+
+        const newNote = {
+            title: noteTitle,
+            content: noteContent,
+            id: Date.now()
+        };
+
+        notes.push(newNote);
+        displayNotes();
+        document.getElementById('noteTitle').value = '';
+        document.getElementById('noteContent').value = '';
+    }
+
+    function displayNotes() {
+        const notesList = document.getElementById('notesList');
+        notesList.innerHTML = '';
+
+        notes.forEach(note => {
+            const noteItem = document.createElement('div');
+            noteItem.className = 'note-item';
+
+            noteItem.innerHTML = `
+                <h3>${note.title}</h3>
+                <p>${note.content}</p>
+                <button class="delete-note-btn" onclick="deleteNote(${note.id})">Delete Note</button>
+            `;
+
+            notesList.appendChild(noteItem);
+        });
+    }
+
+    function deleteNote(id) {
+        notes = notes.filter(note => note.id !== id);
+        displayNotes();
+    }
+</script>
+
+</body>
+</html>
